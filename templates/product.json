@@ -38,6 +38,10 @@
           "type": "quantity_selector",
           "settings": {}
         },
+        "rating_ADeRGY": {
+          "type": "rating",
+          "settings": {}
+        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -62,6 +66,7 @@
         "price",
         "variant_picker",
         "quantity_selector",
+        "rating_ADeRGY",
         "buy_buttons",
         "description",
         "share"
