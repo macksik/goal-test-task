@@ -1,0 +1,271 @@
+<script>
+    class ReviewSection extends HTMLElement {
+      constructor() {
+        super();
+        // Отримуємо всі кнопки фільтрації при ініціалізації
+        this.filterButtons = this.querySelectorAll('.rating-btn');
+        // Отримуємо всі блоки з відгуками
+        this.reviews = this.querySelectorAll('.shopify-product-review');
+        this.init();
+      }
+  
+      init() {
+        // Додаємо обробники подій для кожної кнопки фільтра
+        this.filterButtons.forEach(button => {
+          button.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.filterReviews(button);
+          });
+        });
+      }
+  
+      filterReviews(selectedButton) {
+        // Отримуємо значення рейтингу з data-атрибута кнопки
+        const rating = selectedButton.dataset.rating;
+        
+        // Оновлюємо візуальний стан кнопок (активна/неактивна)
+        this.filterButtons.forEach(btn => btn.classList.remove('active'));
+        selectedButton.classList.add('active');
+        
+        // Фільтруємо відгуки на основі обраного рейтингу
+        this.reviews.forEach(review => {
+          const reviewRating = parseInt(review.dataset.rating);
+          if (rating === 'all') {
+            // Показуємо всі відгуки
+            review.style.display = '';
+          } else {
+            const ratingNum = parseInt(rating);
+            if (ratingNum === 3) {
+              // Показуємо відгуки з рейтингом 3 і нижче
+              review.style.display = reviewRating <= 3 ? '' : 'none';
+            } else {
+              // Показуємо відгуки з конкретним рейтингом
+              review.style.display = reviewRating === ratingNum ? '' : 'none';
+            }
+          }
+        });
+      }
+    }
+  
+    // Реєструємо кастомний елемент після завантаження DOM
+    window.addEventListener('DOMContentLoaded', () => {
+      customElements.define('review-section', ReviewSection);
+    });
+  </script>
+  
+{%- style -%}
+  /* Основні стилі для секції відгуків */
+  .review-section {
+    padding: 40px 0;
+  }
+  /* Стилі для заголовка секції */
+  .review-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  /* Стилі для контейнера кнопок фільтрації */
+  .rating-filter {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  /* Стилі для кнопок фільтрації */
+  .rating-btn {
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  /* Стилі для активної кнопки */
+  .rating-btn.active {
+    background: #000;
+    color: #fff;
+  }
+  /* Адаптивні стилі для мобільних пристроїв */
+  @media screen and (max-width: 768px) {
+    .rating-filter {
+      flex-direction: column;
+      align-items: center;
+    }
+    .rating-btn {
+      width: 200px;
+    }
+  }
+
+  /* Сітка для відображення відгуків */
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
+
+  /* Стилі для окремого блоку відгуку */
+  .review-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background: #fff;
+  }
+
+  /* Стилі для елементів відгуку */
+  .review-rating {
+    margin-bottom: 10px;
+  }
+  .review-author {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .review-title {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+  }
+  .review-content {
+    color: #666;
+    margin-bottom: 10px;
+  }
+  .review-date {
+    color: #999;
+    font-size: 0.9em;
+  }
+
+  @media screen and (max-width: 768px) {
+    .reviews-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+{%- endstyle -%}
+
+<!-- Основний контейнер секції відгуків -->
+<review-section class="review-section">
+  <!-- Заголовок секції з середнім рейтингом -->
+  <div class="review-header">
+    <h2>{{ section.settings.title }}</h2>
+    
+    {%- if section.blocks.size > 0 -%}
+      <!-- Розрахунок середнього рейтингу -->
+      {%- assign total_rating = 0 -%}
+      {%- assign review_count = section.blocks.size -%}
+      
+      {%- for block in section.blocks -%}
+        {%- assign total_rating = total_rating | plus: block.settings.rating -%}
+      {%- endfor -%}
+      
+      {%- assign average_rating = total_rating | divided_by: review_count | round: 1 -%}
+      <div class="average-rating">
+        <span>Average rating: {{ average_rating }} ⭐</span>
+      </div>
+      
+      <!-- Показ рекомендаційного тексту для високих рейтингів -->
+      {%- if average_rating >= 4.5 -%}
+        <div class="recommendation-text">
+          {{ section.settings.recommendation_text }}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+
+  <!-- Кнопки фільтрації відгуків -->
+  <div class="rating-filter">
+    <button class="rating-btn active" data-rating="all">All</button>
+    <button class="rating-btn" data-rating="5">5 ⭐</button>
+    <button class="rating-btn" data-rating="4">4 ⭐</button>
+    <button class="rating-btn" data-rating="3">3 ⭐ and lower</button>
+  </div>
+
+  <!-- Сітка з відгуками -->
+  <div class="reviews-grid">
+    {%- for block in section.blocks -%}
+      <div class="review-item shopify-product-review" 
+           data-rating="{{ block.settings.rating }}"
+           {{ block.shopify_attributes }}>
+        <div class="review-rating">
+          {%- for i in (1..block.settings.rating) -%}⭐{%- endfor -%}
+        </div>
+        <div class="review-author">{{ block.settings.author }}</div>
+        <div class="review-title">{{ block.settings.title }}</div>
+        <div class="review-content">{{ block.settings.content }}</div>
+        <div class="review-date">{{ block.settings.date }}</div>
+      </div>
+    {%- endfor -%}
+  </div>
+</review-section>
+
+{% schema %}
+{
+  "name": "Reviews",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Customer Reviews"
+    },
+    {
+      "type": "text",
+      "id": "recommendation_text",
+      "label": "Recommendation Text",
+      "default": "Customers recommend this product"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Rating",
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author Name",
+          "default": "John Doe"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Review Title",
+          "default": "Great product!"
+        },
+        {
+          "type": "textarea",
+          "id": "content",
+          "label": "Review Content",
+          "default": "This product exceeded my expectations!"
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Review Date",
+          "default": "2024-03-20"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reviews",
+      "blocks": [
+        {
+          "type": "review"
+        },
+        {
+          "type": "review"
+        },
+        {
+          "type": "review"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
