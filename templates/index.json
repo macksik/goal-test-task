@@ -22,6 +22,16 @@
             "date": "2024-03-20"
           }
         },
+        "review_gipx6z": {
+          "type": "review",
+          "settings": {
+            "rating": 3,
+            "author": "TEST TEST",
+            "title": "Great product!",
+            "content": "This product exceeded my expectations!",
+            "date": "2024-03-20"
+          }
+        },
         "review_jQbAQr": {
           "type": "review",
           "settings": {
@@ -45,6 +55,7 @@
       },
       "block_order": [
         "review_cd9QN4",
+        "review_gipx6z",
         "review_jQbAQr",
         "review_hi8ty4"
       ],
