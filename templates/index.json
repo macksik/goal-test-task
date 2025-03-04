@@ -9,43 +9,48 @@
  */
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "review_section_BghpfP": {
+      "type": "review-section",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "review_cd9QN4": {
+          "type": "review",
           "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
+            "rating": 5,
+            "author": "John Doe",
+            "title": "Great product!",
+            "content": "This product exceeded my expectations!",
+            "date": "2024-03-20"
           }
         },
-        "button": {
-          "type": "buttons",
+        "review_jQbAQr": {
+          "type": "review",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "rating": 5,
+            "author": "John Doe",
+            "title": "Great product!",
+            "content": "This product exceeded my expectations!",
+            "date": "2024-03-20"
+          }
+        },
+        "review_hi8ty4": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "author": "John Doe",
+            "title": "Great product!",
+            "content": "This product exceeded my expectations!",
+            "date": "2024-03-20"
           }
         }
       },
       "block_order": [
-        "heading",
-        "button"
+        "review_cd9QN4",
+        "review_jQbAQr",
+        "review_hi8ty4"
       ],
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "title": "Customer Reviews",
+        "recommendation_text": "Customers recommend this product"
       }
     },
     "featured_collection": {
@@ -59,12 +64,11 @@
         "collection": "all",
         "products_to_show": 8,
         "columns_desktop": 4,
-        "color_scheme": "scheme-1",
         "full_width": false,
         "show_view_all": true,
         "view_all_style": "solid",
         "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
+        "color_scheme": "scheme-1",
         "image_ratio": "adapt",
         "image_shape": "default",
         "show_secondary_image": true,
@@ -72,13 +76,14 @@
         "show_rating": false,
         "quick_add": "none",
         "columns_mobile": "2",
+        "swipe_on_mobile": false,
         "padding_top": 44,
         "padding_bottom": 36
       }
     }
   },
   "order": [
-    "image_banner",
+    "review_section_BghpfP",
     "featured_collection"
   ]
 }
